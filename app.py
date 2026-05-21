@@ -4,12 +4,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import streamlit as st
-import torch
 from PIL import Image
 
 from src import config
-from src.checkpoint import load_model
-from src.dataset import get_transforms
 
 
 st.set_page_config(page_title="Neural Network Image Classifier", layout="centered")
@@ -17,6 +14,8 @@ st.set_page_config(page_title="Neural Network Image Classifier", layout="centere
 
 @st.cache_resource
 def get_model(model_path: str):
+    from src.checkpoint import load_model
+
     return load_model(Path(model_path), config.DEVICE)[0]
 
 
@@ -28,6 +27,9 @@ def load_labels(labels_path: str) -> pd.DataFrame:
 def predict_dataset_image(image: Image.Image, model_path: Path) -> dict:
     if not model_path.exists():
         return predict_demo_image(image)
+
+    import torch
+    from src.dataset import get_transforms
 
     model = get_model(str(model_path))
     transform = get_transforms(train=False)

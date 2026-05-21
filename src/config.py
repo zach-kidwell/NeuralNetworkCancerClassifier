@@ -1,7 +1,5 @@
 from pathlib import Path
 
-import torch
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
@@ -33,4 +31,9 @@ CLASS_NAMES = ["No Cancer Detected", "Cancer Detected"]
 MODEL_PATH = MODELS_DIR / "cancer_cnn.pth"
 METRICS_PATH = OUTPUTS_DIR / "metrics.json"
 
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+try:
+    import torch
+
+    DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+except ImportError:
+    DEVICE = "cpu"
